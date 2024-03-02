@@ -1,13 +1,15 @@
-import uvloop
+import sys
+import os
 
+sys.path.append(os.path.abspath('.'))  # Terminal compatibility
+
+import uvloop
 from dotenv import load_dotenv
-from os import environ
 
 from src.models.bot import Bot
-
 
 uvloop.install()
 load_dotenv()
 
-bot = Bot(token=environ["TOKEN"])
+bot = Bot(token=os.environ["TOKEN"])
 bot.run()

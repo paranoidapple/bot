@@ -82,6 +82,12 @@ async def generate_quote(
             title="quote",
             description=quote,
             color=int(hex(random.randrange(0, 2**24)), 16),
+        ).set_footer(
+            "WARNING: Some prompts may imply shipping between 2 or more characters. This generator is not "
+            "meant to imply any adult/minor, abusive, incestuous, or otherwise problematic ships. In the "
+            "future I plan to implement a feature to filter out prompts that involve shipping, but until then "
+            "I apologize if any prompts try to ship characters that you don't want shipped. -ScatterPatter\n"
+            "*Find this generator at https://incorrect-quotes-generator.neocities.org/, all credit goes there.*"
         )
     )
 
