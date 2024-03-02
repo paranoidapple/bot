@@ -1,0 +1,61 @@
+{
+    "swears": {
+        "arse/ass": {
+            "1": "", 
+            "5": "", 
+            "10": "", 
+            "25": "", 
+            "50": "", 
+            "100": "", 
+            "200": "", 
+            "500": "", 
+            "1000": ""
+        },
+        "bastard": {}, 
+        "bitch": {
+            "1": "What You Don't Have"
+        },
+        "cock": {},
+        "cunt": {},
+        "damn": {
+            "1": "dang"
+        },
+        "dick": {},
+        "fag": {},
+        "fuck": {
+            "1": "wtf did you just say the fuck word"
+        },
+        "nigga/nigger": {
+            "1": "C'mon Da'quan, it was only one word", 
+            "5": "I was hoping you'd never get here", 
+            "10": "18 parts sugar, dash of water", 
+            "25": "You Better be Black", 
+            "50": "Buy a pass today!", 
+            "100": "Buy the pass, it's only $50", 
+            "200": "Dude you really need a pass", 
+            "500": "Guess who's not going to Harvard", 
+            "1000": "Accepted Into N*gga Immigrations"
+        },
+        "pussy": {},
+        "retard": {}, 
+        "shit": {},
+        "slut": {},
+        "twat": {},
+        "wank": {},
+        "whore": {}
+    }, 
+    "total": {
+        "1": "Join the Club", 
+        "5": "Wash your mouth, son", 
+        "10": "Word Whiz", 
+        "25": "25 & Going Strong", 
+        "50": "Like a Sailor", 
+        "100": "Certified Rapper", 
+        "250": "In the Hood", 
+        "500": "Quincentennial", 
+        "1000": "a thousand cusses, jeez", 
+        "2500": "Certified Windbag", 
+        "4000": "Shakespeare of Swears", 
+        "5000": "Gold Medal in Verbal Diarrhea"
+    }
+}
