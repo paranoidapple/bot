@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath('.'))  # Terminal compatibility
+sys.path.append(os.path.abspath("."))  # Terminal compatibility
 
 import uvloop
 from dotenv import load_dotenv

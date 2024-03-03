@@ -63,13 +63,19 @@ class Database:
             conn = await asyncpg.connect(dsn=self.dsn)
             await conn.execute(
                 """
-            ALTER TABLE swear_counter 
-            ADD COLUMN IF NOT EXISTS user_id BIGINT, 
-            ADD COLUMN IF NOT EXISTS guild_id BIGINT, 
-            ADD COLUMN IF NOT EXISTS swears JSON,
-            ADD UNIQUE (user_id, guild_id);  
-            """
-            )  # Update swear counter
+                    ALTER TABLE swear_counter 
+                    ADD COLUMN IF NOT EXISTS user_id BIGINT, 
+                    ADD COLUMN IF NOT EXISTS guild_id BIGINT, 
+                    ADD COLUMN IF NOT EXISTS swears JSON,
+                    ADD UNIQUE (user_id, guild_id);
+                    
+                    ALTER TABLE tags 
+                    ADD COLUMN IF NOT EXISTS guild_id BIGINT, 
+                    ADD COLUMN IF NOT EXISTS key TEXT, 
+                    ADD COLUMN IF NOT EXISTS value TEXT, 
+                    ADD UNIQUE (key);
+                """
+            )  # Update tables
 
         except asyncpg.InvalidCatalogNameError:  # Database does not exist
             sys_conn = await asyncpg.connect(
@@ -82,13 +88,22 @@ class Database:
             pass
 
         finally:
-            # Create swears db
+            # Create databases
             conn = await asyncpg.connect(dsn=self.dsn)
             await conn.execute(
-                """CREATE TABLE IF NOT EXISTS swear_counter (
-                    user_id BIGINT, 
-                    guild_id BIGINT, 
-                    swears JSONB, 
-                    UNIQUE (user_id, guild_id)
-                );"""
+                """
+                    CREATE TABLE IF NOT EXISTS swear_counter (
+                        user_id BIGINT, 
+                        guild_id BIGINT, 
+                        swears JSONB, 
+                        UNIQUE (user_id, guild_id)
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS tags (
+                        guild_id BIGINT, 
+                        key TEXT, 
+                        value TEXT, 
+                        UNIQUE (key)
+                    );
+                """
             )
