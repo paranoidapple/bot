@@ -12,7 +12,7 @@ swear_counter = lightbulb.Plugin("swear counter")
 # Define swear constants
 SWEARS: set[str] = set()
 CLEAN_WORDS: set[str] = set()
-SWEAR_ACHIEVEMENTS: dict[str, dict[str]] = {}  # achievements for each individual sewar
+SWEAR_ACHIEVEMENTS: dict[str, dict[str, str]] = {}  # achievements for each individual sewar
 TOTAL_ACHIEVEMENTS: dict[str, str] = {}  # achievements for total swearing
 
 SWEAR_COUNTER_DIR = f"{Bot.base_dir}/text/swear_counter"
