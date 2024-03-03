@@ -5,6 +5,8 @@ import asyncpg
 import json
 import typing as t
 
+from os import getenv
+
 if t.TYPE_CHECKING:
     from .bot import Bot
 
@@ -19,8 +21,8 @@ class Database:
 
     def __init__(self, bot: Bot) -> None:
         self.bot = bot
-        self.user = "postgres"
-        self.password = "postgres"
+        self.user = getenv("user") or "postgres"
+        self.password = getenv("password") or "postgres"
         self.host = "localhost"
         self.db_name = "intellicat"
         self.port = 5432
