@@ -1,3 +1,5 @@
 A discord bot that I keep rewriting.
 
-- Currently has a swear counter
+features: 
+- swear counter
+- incorrect quotes generator
