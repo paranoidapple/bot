@@ -55,6 +55,7 @@ async def create_prompts(_: hikari.StartedEvent):
 async def generate_quote(
     ctx: lightbulb.SlashContext,
 ):
+    """COMMAND | Generates a (hopefully) funny incorrect quote."""
 
     # Parse options
     options = {k: v for k, v in ctx.options.items() if v is not None}

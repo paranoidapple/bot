@@ -17,7 +17,9 @@ async def create_tag(guild_id: int, key: str, value: str):
             INSERT INTO tags (guild_id, key, value)
             VALUES ($1, $2, $3)
         """,
-        guild_id, key, value
+        guild_id,
+        key,
+        value,
     )
 
 
@@ -29,7 +31,8 @@ async def delete_tag(guild_id: int, key: str):
         """
             DELETE FROM tags WHERE guild_id = $1 AND key = $2
         """,
-        guild_id, key
+        guild_id,
+        key,
     )
 
 
