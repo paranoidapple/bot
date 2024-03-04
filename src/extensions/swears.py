@@ -232,9 +232,7 @@ async def delete_from_swear_db(
 
     if not user_id:  # Delete guild swears
         query = "DELETE FROM swear_counter WHERE guild_id = $1"
-        f = await bot.db.execute(query, guild_id)
-        print(type(f))
-        return f
+        return await bot.db.execute(query, guild_id)
 
     # Delete user swears
     query = "DELETE FROM swear_counter WHERE guild_id = $1 AND user_id = $2"
