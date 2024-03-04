@@ -300,6 +300,7 @@ async def get_swears(ctx: lightbulb.SlashContext, user: hikari.Member | None = N
 
 
 @swears.child()
+@lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_GUILD))
 @lightbulb.option(
     name="user",
     description="Resets a user's swear count.",
@@ -340,6 +341,20 @@ async def reset_user_swears(
             color=0x00FF00,
         )
     )
+
+
+@swear_counter.listener(lightbulb.CommandErrorEvent)
+async def on_error(event: lightbulb.CommandErrorEvent):
+    """Error handler for swear counting."""
+
+    if isinstance(event.exception, lightbulb.MissingRequiredPermission):
+        await event.context.respond(
+            hikari.Embed(
+                title="nah",
+                description="You don't have permissions to run this command.",
+                color=0xF01000,
+            )
+        )
 
 
 def load(bot: Bot):
