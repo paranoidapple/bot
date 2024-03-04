@@ -38,7 +38,7 @@ async def create_word_lists(_: hikari.StartedEvent):
 
     # Clean words
     global CLEAN_WORDS
-    async with aiofiles.open(f"{SWEAR_COUNTER_DIR}/clean.txt", "r+") as f:
+    async with aiofiles.open(f"{SWEAR_COUNTER_DIR}/clean.txt", 'r+') as f:
         async for line in f:
             CLEAN_WORDS.add(line.strip())
 
@@ -56,8 +56,10 @@ def count_swears(message: str) -> dict[str, int] | dict:
 
     for word in message.lower().split():
         for swear in SWEARS:
-            if (swear in word) and (word not in CLEAN_WORDS):
-                swears_used[str(swear)] = swears_used.get(str(swear), 0) + 1
+            for swear_partition in swear.split('/'):
+                if (swear_partition in word) and (word not in CLEAN_WORDS):
+                    swears_used[str(swear)] = swears_used.get(str(swear), 0) + 1
+                    break  # Can't have both partitions in the same word
 
     return swears_used
 
