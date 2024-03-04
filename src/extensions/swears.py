@@ -54,7 +54,7 @@ def count_swears(message: str) -> dict[str, int] | dict:
     """
     swears_used = {}
 
-    for word in message.split():
+    for word in message.lower().split():
         for swear in SWEARS:
             if (swear in word) and (word not in CLEAN_WORDS):
                 swears_used[str(swear)] = swears_used.get(str(swear), 0) + 1
@@ -134,7 +134,7 @@ async def on_message(message: hikari.GuildMessageCreateEvent) -> None:
         return
 
     # Check if any swears are in message
-    if not message:
+    if not message.content:
         return
 
     msg_swears = count_swears(message.content)
