@@ -38,9 +38,27 @@ async def create_word_lists(_: hikari.StartedEvent):
 
     # Clean words
     global CLEAN_WORDS
-    async with aiofiles.open(f"{SWEAR_COUNTER_DIR}/clean.txt", 'r+') as f:
+    async with aiofiles.open(f"{SWEAR_COUNTER_DIR}/clean.txt", "r+") as f:
         async for line in f:
             CLEAN_WORDS.add(line.strip())
+
+
+def limit_swears(swears_used: dict[str, int] | dict) -> dict[str, int] | dict:
+    """
+    Limits the swear count to protect against spam swearing.
+    (Basic spam protection)
+
+    :param dict[str, int] | dict swears_used: A swear/count dictionary of swears used in a message.
+
+    :return: A reduced swear/count dictionary of swears used in a message.
+    :rtype dict[str, int] | dict:
+    """
+
+    for k, v in swears_used.items():
+        if v >= 10:  # 10+ swears of a word
+            swears_used[k] = 1
+
+    return swears_used
 
 
 def count_swears(message: str) -> dict[str, int] | dict:
@@ -56,12 +74,12 @@ def count_swears(message: str) -> dict[str, int] | dict:
 
     for word in message.lower().split():
         for swear in SWEARS:
-            for swear_partition in swear.split('/'):
+            for swear_partition in swear.split("/"):
                 if (swear_partition in word) and (word not in CLEAN_WORDS):
                     swears_used[str(swear)] = swears_used.get(str(swear), 0) + 1
                     break  # Can't have both partitions in the same word
 
-    return swears_used
+    return limit_swears(swears_used)
 
 
 def get_achievements(
