@@ -5,11 +5,11 @@ import attrs
 class SwearAchievement:
     """Represents an achievement obtained from swearing a specific number of times."""
 
-    """The amount of times the swear was used (in string format)."""
     count: str
+    """The amount of times the swear was used (in string format)."""
 
-    """The name of the achievement."""
     name: str
+    """The name of the achievement."""
 
-    """The swear used."""
     swear: str
+    """The swear used."""
