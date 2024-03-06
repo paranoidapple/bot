@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncpg
+import aiofiles
 
 import json
 import typing as t
@@ -28,6 +29,9 @@ class Database:
         self.port = 5432
         self.pool: asyncpg.Pool | None = None
 
+        DatabaseModel.db = self
+        DatabaseModel.bot = self.bot
+
     def __getattr__(self, item):
         """Proxies methods and properties not in the database class into the connection pool."""
         return getattr(self.pool, item)
@@ -45,10 +49,10 @@ class Database:
     async def connect(self) -> None:
         """Starts a new connection via a connection pool."""
         if not self.pool:
-            await self.ensure_db()
             self.pool = await asyncpg.create_pool(
                 dsn=self.dsn, init=self.init_connection
             )
+            await self.ensure_schema()
         else:
             raise DatabaseStateConflict("Already connected to database")
 
@@ -59,53 +63,16 @@ class Database:
         else:
             raise DatabaseStateConflict("Not connected to database")
 
-    async def ensure_db(self) -> None:
-        """Ensures the bot database and its schema exists."""
-        try:
-            conn = await asyncpg.connect(dsn=self.dsn)
-            await conn.execute(
-                """
-                    ALTER TABLE swear_counter 
-                    ADD COLUMN IF NOT EXISTS user_id BIGINT, 
-                    ADD COLUMN IF NOT EXISTS guild_id BIGINT, 
-                    ADD COLUMN IF NOT EXISTS swears JSON,
-                    ADD UNIQUE (user_id, guild_id);
-                    
-                    ALTER TABLE tags 
-                    ADD COLUMN IF NOT EXISTS guild_id BIGINT, 
-                    ADD COLUMN IF NOT EXISTS key TEXT, 
-                    ADD COLUMN IF NOT EXISTS value TEXT, 
-                    ADD UNIQUE (key);
-                """
-            )  # Update tables
+    async def ensure_schema(self) -> None:
+        """Ensures the bot database and its schema exists. (run after creating pool)"""
+        SCHEMA_SCRIPT_PATH = f"{self.bot.base_dir}/db/schema.sql"
+        async with aiofiles.open(SCHEMA_SCRIPT_PATH, 'r') as f:
+            async with self.acquire() as conn:
+                await conn.execute(await f.read())
 
-        except asyncpg.InvalidCatalogNameError:  # Database does not exist
-            sys_conn = await asyncpg.connect(
-                database="template1", user=self.user, password=self.password
-            )
-            await sys_conn.execute(f"CREATE DATABASE {self.db_name}")
-            await sys_conn.close()
 
-        except asyncpg.UndefinedTableError:
-            pass
+class DatabaseModel:  # (thanks hypergonial)
+    """Utility for database models."""
 
-        finally:
-            # Create databases
-            conn = await asyncpg.connect(dsn=self.dsn)
-            await conn.execute(
-                """
-                    CREATE TABLE IF NOT EXISTS swear_counter (
-                        user_id BIGINT, 
-                        guild_id BIGINT, 
-                        swears JSONB, 
-                        UNIQUE (user_id, guild_id)
-                    );
-                    
-                    CREATE TABLE IF NOT EXISTS tags (
-                        guild_id BIGINT, 
-                        key TEXT, 
-                        value TEXT, 
-                        UNIQUE (key)
-                    );
-                """
-            )
+    db: Database
+    bot: Bot
